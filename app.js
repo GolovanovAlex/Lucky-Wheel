@@ -18,6 +18,7 @@ const spinValues = [
 ];
 
 const size = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
+
 let spinColors = [
   '#E74C3C',
   '#7D3C98',
@@ -35,14 +36,15 @@ let spinColors = [
 
 // ---- ---- Chart JS ---- ---- //
 // ---- ---- Help: https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html  ---- ---- //
-let spinChart = new CharacterData(spinWheel, {
+
+let spinChart = new Chart(spinWheel, {
   plugins: [ChartDataLabels],
   type: 'pie',
   data: {
     labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     datasets: [
       {
-        backgroundsColor: spinColors,
+        backgroundColor: spinColors,
         data: size,
       },
     ],
@@ -58,7 +60,7 @@ let spinChart = new CharacterData(spinWheel, {
       datalabels: {
         rotation: 90,
         color: '#ffffff',
-        formatter: (_, context) => context.chart.data.labels[context.dtaIndex],
+        formatter: (_, context) => context.chart.data.labels[context.dataIndex],
         font: { size: 24 },
       },
     },
@@ -76,6 +78,8 @@ const generateValue = (angleValue) => {
   }
 };
 
+// ---- ---- Spin ---- ---- //
+// ---- ---- Spin ---- ---- //
 // ---- ---- Spin ---- ---- //
 let count = 0;
 let resultValue = 101;
