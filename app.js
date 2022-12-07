@@ -32,3 +32,69 @@ let spinColors = [
   '#7D3C98',
   '#138D75',
 ];
+
+// ---- ---- Chart JS ---- ---- //
+// ---- ---- Help: https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html  ---- ---- //
+let spinChart = new CharacterData(spinWheel, {
+  plugins: [ChartDataLabels],
+  type: 'pie',
+  data: {
+    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    datasets: [
+      {
+        backgroundsColor: spinColors,
+        data: size,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 0 },
+    plugins: {
+      tooltip: false,
+      legend: {
+        display: false,
+      },
+      datalabels: {
+        rotation: 90,
+        color: '#ffffff',
+        formatter: (_, context) => context.chart.data.labels[context.dtaIndex],
+        font: { size: 24 },
+      },
+    },
+  },
+});
+
+// ---- ---- Value and Btn ---- ---- //
+const generateValue = (angleValue) => {
+  for (let i of spinValues) {
+    if (angleValue >= i.minDegree && angleValue <= i.maxDegree) {
+      text.innerHTML = `<p>Congratulations, You have Won $${i.value}!</p>`;
+      spinBtn.disabled = false;
+      break;
+    }
+  }
+};
+
+// ---- ---- Spin ---- ---- //
+let count = 0;
+let resultValue = 101;
+spinBtn.addEventListener('click', () => {
+  spinBtn.disabled = true;
+  text.innerHTML = `<p>Best of Luck!</p>`;
+  let randomDegree = Math.floor(Math.random() * (355 - 0 + 1) + 0);
+  let rotationInterval = window.setInterval(() => {
+    spinChart.options.rotation = spinChart.options.rotation + resultValue;
+    spinChart.update();
+    if (spinChart.options.rotation >= 360) {
+      count += 1;
+      resultValue -= 5;
+      spinChart.options.rotation = 0;
+    } else if (count > 15 && spinChart.options.rotation == randomDegree) {
+      generateValue(randomDegree);
+      clearInterval(rotationInterval);
+      count = 0;
+      resultValue = 101;
+    }
+  }, 10);
+});
